@@ -16,7 +16,7 @@
 
     <testsuites>
         <testsuite name="default">
-            <directory suffix="Test.php">./src/AppInsightsPHP/Client/Tests</directory>
+            <directory suffix="Test.php">./tests/AppInsightsPHP/Client/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
