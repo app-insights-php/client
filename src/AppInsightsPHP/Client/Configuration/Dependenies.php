@@ -7,10 +7,12 @@ namespace AppInsightsPHP\Client\Configuration;
 final class Dependenies
 {
     private $enabled;
+    private $ignoredDependencies;
 
-    public function __construct(bool $enabled)
+    public function __construct(bool $enabled, array $ignoredDependencies = [])
     {
         $this->enabled = $enabled;
+        $this->ignoredDependencies = $ignoredDependencies;
     }
 
     public function disable() : void
@@ -26,5 +28,15 @@ final class Dependenies
     public function isEnabled() : bool
     {
         return $this->enabled;
+    }
+
+    public function ignore(string $dependencyName) : void
+    {
+        $this->ignoredDependencies[] = $dependencyName;
+    }
+
+    public function isIgnored(string $dependencyName) : bool
+    {
+        return \in_array($dependencyName, $this->ignoredDependencies, true);
     }
 }

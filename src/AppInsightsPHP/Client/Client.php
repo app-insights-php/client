@@ -51,8 +51,10 @@ final class Client
             return ;
         }
 
-        if (\in_array($name, ['trackDependency']) && !$this->configuration->dependencies()->isEnabled()) {
-            return ;
+        if (\in_array($name, ['trackDependency'])) {
+            if (!$this->configuration->dependencies()->isEnabled() || $this->configuration->dependencies()->isIgnored($arguments[0])) {
+                return;
+            }
         }
 
         if (\in_array($name, ['trackException'])) {
