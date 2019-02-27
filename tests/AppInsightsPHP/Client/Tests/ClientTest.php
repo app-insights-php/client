@@ -93,9 +93,9 @@ final class ClientTest extends TestCase
 
         $telemetryMock->expects($this->once())
             ->method('trackDependency')
-            ->with('name', '', null, null, 0, true, null, null);
+            ->with('dependency_name', '', null, null, 0, true, null, null);
 
-        $client->trackDependency('name');
+        $client->trackDependency('dependency_name');
     }
 
     public function test_tracking_dependencies_when_option_is_disabled()
@@ -112,9 +112,25 @@ final class ClientTest extends TestCase
         $telemetryMock->expects($this->never())
             ->method('trackDependency');
 
-        $client->trackDependency('name');
+        $client->trackDependency('dependency_name');
     }
 
+    public function test_tracking_dependencies_when_dependency_is_ignored()
+    {
+        $telemetryMock = $this->createMock(Telemetry_Client::class);
+
+        $client = new Client(
+            $telemetryMock,
+            Configuration::createDefault()
+        );
+
+        $client->configuration()->dependencies()->ignore('dependency_name');
+
+        $telemetryMock->expects($this->never())
+            ->method('trackDependency');
+
+        $client->trackDependency('dependency_name');
+    }
 
     public function test_tracking_exceptions_when_option_is_enabled()
     {
