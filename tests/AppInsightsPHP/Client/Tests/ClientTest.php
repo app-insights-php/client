@@ -224,6 +224,20 @@ final class ClientTest extends TestCase
         $client->trackMessage('message');
     }
 
+    public function test_flushing_when_client_is_disabled()
+    {
+        $configuration = Configuration::createDefault();
+        $configuration->disable();
+
+        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
+
+        $telemetryMock->expects($this->never())->method('flush');
+
+        $client = new Client($telemetryMock, $configuration);
+        $client->flush();
+    }
+
     public function test_fallback_logger_during_flush_unexpected_exception()
     {
         $telemetryMock = $this->createMock(Telemetry_Client::class);
