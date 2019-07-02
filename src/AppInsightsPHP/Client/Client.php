@@ -51,6 +51,10 @@ final class Client
 
     public function flush(): void
     {
+        if (!$this->configuration->isEnabled()) {
+            return ;
+        }
+
         try {
             if ($this->failureCache && $this->failureCache->has(self::CACHE_CHANNEL_KEY)) {
                 $this->client->getChannel()->setQueue(
