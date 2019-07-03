@@ -5,6 +5,8 @@ declare (strict_types=1);
 namespace AppInsightsPHP\Client;
 
 use ApplicationInsights\Telemetry_Client;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 
@@ -49,10 +51,10 @@ final class Client
         return $this->configuration;
     }
 
-    public function flush(): void
+    public function flush(): ?ResponseInterface
     {
         if (!$this->configuration->isEnabled()) {
-            return ;
+            return null;
         }
 
         try {
@@ -67,7 +69,7 @@ final class Client
                 $this->failureCache->delete(self::CACHE_CHANNEL_KEY);
             }
 
-            $this->client->flush();
+            return $this->client->flush();
         } catch (\Throwable $e) {
             if ($this->failureCache) {
                 $queueContent = $this->client->getChannel()->getQueue();
@@ -86,7 +88,13 @@ final class Client
                     json_decode($this->client->getChannel()->getSerializedQueue(), true)
                 );
             }
+
+            if ($e instanceof RequestException) {
+                return $e->getResponse();
+            }
         }
+
+        return null;
     }
 
     public function __call($name, $arguments)
