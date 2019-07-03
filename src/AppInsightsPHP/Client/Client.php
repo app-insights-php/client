@@ -5,7 +5,9 @@ declare (strict_types=1);
 namespace AppInsightsPHP\Client;
 
 use ApplicationInsights\Telemetry_Client;
+use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -30,15 +32,18 @@ final class Client
     private $client;
     private $configuration;
     private $failureCache;
+    private $fallbackLogger;
 
     public function __construct(
         Telemetry_Client $client,
         Configuration $configuration,
-        CacheInterface $failureCache = null
+        CacheInterface $failureCache = null,
+        LoggerInterface $fallbackLogger = null
     ) {
         $this->client = $client;
         $this->configuration = $configuration;
         $this->failureCache = $failureCache;
+        $this->fallbackLogger = $fallbackLogger;
     }
 
     public function configuration(): Configuration
@@ -77,8 +82,19 @@ final class Client
                 $this->failureCache->set(self::CACHE_CHANNEL_KEY, serialize($queueContent), self::CACHE_CHANNEL_TTL_SEC);
             }
 
-            throw $e;
+            if ($this->fallbackLogger) {
+                $this->fallbackLogger->error(
+                    sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                    json_decode($this->client->getChannel()->getSerializedQueue(), true)
+                );
+            }
+
+            if ($e instanceof RequestException) {
+                return $e->getResponse();
+            }
         }
+
+        return null;
     }
 
     public function __call($name, $arguments)

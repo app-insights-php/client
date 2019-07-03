@@ -238,34 +238,48 @@ final class ClientTest extends TestCase
         $client->flush();
     }
 
+    public function test_fallback_logger_during_flush_unexpected_exception()
+    {
+        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+
+        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
+        $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
+
+        $loggerMock->expects($this->once())
+            ->method('error')
+            ->with('Exception occurred while flushing App Insights Telemetry Client: Unexpected API exception');
+
+        $client = new Client($telemetryMock, Configuration::createDefault(), null, $loggerMock);
+        $client->flush();
+    }
+
     public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_empty()
     {
         $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
-        $exception = new \RuntimeException('Unexpected API exception');
 
         $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
-        $telemetryMock->method('flush')->willThrowException($exception);
+        $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
         $cacheMock->method('has')->willReturn(false);
 
         $cacheMock->expects($this->once())
             ->method('set')
             ->with(Client::CACHE_CHANNEL_KEY, serialize(['some_log_entry']), Client::CACHE_CHANNEL_TTL_SEC);
 
-        $this->expectExceptionObject($exception);
-
-        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock);
+        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock, $loggerMock);
         $client->flush();
     }
 
     public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_not_empty()
     {
         $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
-        $exception = new \RuntimeException('Unexpected API exception');
 
         $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
-        $telemetryMock->method('flush')->willThrowException($exception);
+        $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
         $cacheMock->method('has')->willReturn(true);
         $cacheMock->method('get')->willReturn(serialize(['some_older_entry']));
 
@@ -273,9 +287,7 @@ final class ClientTest extends TestCase
             ->method('set')
             ->with(Client::CACHE_CHANNEL_KEY, serialize(['some_older_entry', 'some_log_entry']), Client::CACHE_CHANNEL_TTL_SEC);
 
-        $this->expectExceptionObject($exception);
-
-        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock);
+        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock, $loggerMock);
         $client->flush();
     }
 
