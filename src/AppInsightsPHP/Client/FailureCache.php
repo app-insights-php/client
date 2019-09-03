@@ -9,8 +9,8 @@ use Psr\SimpleCache\CacheInterface;
 
 final class FailureCache
 {
-    private const CACHE_CHANNEL_KEY = 'app_insights_php.failure_cache';
-    private const CACHE_CHANNEL_TTL_SEC = 86400;
+    public const CACHE_CHANNEL_KEY = 'app_insights_php.failure_cache';
+    public const CACHE_CHANNEL_TTL_SEC = 86400;
 
     private $cache;
 

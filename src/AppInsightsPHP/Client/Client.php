@@ -57,7 +57,7 @@ final class Client
         }
 
         try {
-            if (!$this->failureCache->empty()) {
+            if ($this->failureCache->empty()) {
                 return $response;
             }
 

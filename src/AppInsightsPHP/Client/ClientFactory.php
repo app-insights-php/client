@@ -6,6 +6,7 @@ namespace AppInsightsPHP\Client;
 
 use ApplicationInsights\Telemetry_Client;
 use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 final class ClientFactory implements ClientFactoryInterface
 {
