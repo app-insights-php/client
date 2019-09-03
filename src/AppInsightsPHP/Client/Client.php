@@ -23,7 +23,7 @@ final class Client
         Telemetry_Client $client,
         Configuration $configuration,
         FailureCache $failureCache,
-        LoggerInterface $fallbackLogger = null
+        LoggerInterface $fallbackLogger
     ) {
         $this->client = $client;
         $this->configuration = $configuration;
@@ -45,31 +45,49 @@ final class Client
         }
 
         try {
-            $this->client->flush();
+            $response = $this->client->flush();
         } catch (\Throwable $e) {
             $this->failureCache->add(...$this->client->getChannel()->getQueue());
+            $this->fallbackLogger->error(
+                sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                \json_decode($this->client->getChannel()->getSerializedQueue(), true)
+            );
 
-            if ($this->fallbackLogger) {
-                $this->fallbackLogger->error(
-                    sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
-                    json_decode($this->client->getChannel()->getSerializedQueue(), true)
-                );
-            }
-
-            if ($e instanceof RequestException) {
-                return $e->getResponse();
-            }
+            return $e instanceof RequestException ? $e->getResponse() : null;
         }
 
         try {
-            $this->failureCache->flush();
-        } catch (\Throwable $e) {
-            if ($this->fallbackLogger) {
-                $this->fallbackLogger->error(
-                    sprintf('Exception occurred while flushing App Insights Failure Cache: %s', $e->getMessage()),
-                    ['exception' => $e]
-                );
+            if (!$this->failureCache->empty()) {
+                return $response;
             }
+
+            $failures = [];
+            foreach ($this->failureCache->all() as $item) {
+                try {
+                    (new SendOne)($this->client, $item);
+                } catch (\Throwable $e) {
+                    $this->fallbackLogger->error(
+                        sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                        [
+                            'item' => \json_encode($item),
+                            'exception' => $e
+                        ]
+                    );
+
+                    $failures[] = $item;
+                }
+            }
+
+            $this->failureCache->purge();
+
+            if (\count($failures) > 0) {
+                $this->failureCache->add(...$failures);
+            }
+        } catch (\Throwable $e) {
+            $this->fallbackLogger->error(
+                sprintf('Exception occurred while flushing App Insights Failure Cache: %s', $e->getMessage()),
+                ['exception' => $e]
+            );
         }
 
         return null;
