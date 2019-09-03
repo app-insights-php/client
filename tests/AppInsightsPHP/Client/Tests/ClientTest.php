@@ -6,23 +6,28 @@ namespace AppInsightsPHP\Client\Tests;
 
 use AppInsightsPHP\Client\Client;
 use AppInsightsPHP\Client\Configuration;
+use AppInsightsPHP\Client\FailureCache;
+use ApplicationInsights\Channel\Contracts\Envelope;
 use ApplicationInsights\Channel\Contracts\Request_Data;
 use ApplicationInsights\Channel\Telemetry_Channel;
 use ApplicationInsights\Telemetry_Client;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Psr\SimpleCache\CacheInterface;
 
 final class ClientTest extends TestCase
 {
     public function test_tracking_when_client_is_disabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->disable();
@@ -49,11 +54,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_request_when_option_is_enabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $telemetryMock->expects($this->once())
@@ -65,11 +72,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_request_when_option_is_disabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->requests()->disable();
@@ -88,11 +97,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_dependencies_when_option_is_enabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $telemetryMock->expects($this->once())
@@ -104,11 +115,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_dependencies_when_option_is_disabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->dependencies()->disable();
@@ -121,11 +134,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_dependencies_when_dependency_is_ignored()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->dependencies()->ignore('dependency_name');
@@ -138,11 +153,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_exceptions_when_option_is_enabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $exception = new \Exception();
@@ -156,11 +173,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_exceptions_when_option_is_disabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->exceptions()->disable();
@@ -175,11 +194,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_exceptions_that_suppose_to_be_ignored()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->exceptions()->ignore(\RuntimeException::class);
@@ -193,11 +214,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_traces_when_option_is_enabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $telemetryMock->expects($this->once())
@@ -209,11 +232,13 @@ final class ClientTest extends TestCase
 
     public function test_tracking_traces_when_option_is_disabled()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $client = new Client(
             $telemetryMock,
-            Configuration::createDefault()
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
         );
 
         $client->configuration()->traces()->disable();
@@ -229,98 +254,102 @@ final class ClientTest extends TestCase
         $configuration = Configuration::createDefault();
         $configuration->disable();
 
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
-        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
+        $telemetryMock = $this->createTelemetryClientMock();
 
         $telemetryMock->expects($this->never())->method('flush');
 
-        $client = new Client($telemetryMock, $configuration);
+        $client = new Client(
+            $telemetryMock,
+            $configuration,
+            new FailureCache($this->createMock(CacheInterface::class)),
+            new NullLogger()
+        );
         $client->flush();
     }
 
     public function test_fallback_logger_during_flush_unexpected_exception()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
         $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
 
         $loggerMock->expects($this->once())
             ->method('error')
             ->with('Exception occurred while flushing App Insights Telemetry Client: Unexpected API exception');
 
-        $client = new Client($telemetryMock, Configuration::createDefault(), null, $loggerMock);
+        $client = new Client(
+            $telemetryMock,
+            Configuration::createDefault(),
+            new FailureCache($this->createMock(CacheInterface::class)),
+            $loggerMock
+        );
         $client->flush();
     }
 
     public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_empty()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
 
-        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
         $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
         $cacheMock->method('has')->willReturn(false);
 
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with(Client::CACHE_CHANNEL_KEY, serialize(['some_log_entry']), Client::CACHE_CHANNEL_TTL_SEC);
+            ->with(FailureCache::CACHE_CHANNEL_KEY, serialize([new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
 
-        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock, $loggerMock);
+        $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
     }
 
     public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_not_empty()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
 
-        $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
         $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
         $cacheMock->method('has')->willReturn(true);
-        $cacheMock->method('get')->willReturn(serialize(['some_older_entry']));
+        $cacheMock->method('get')->willReturn(serialize([new Envelope()]));
 
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with(Client::CACHE_CHANNEL_KEY, serialize(['some_older_entry', 'some_log_entry']), Client::CACHE_CHANNEL_TTL_SEC);
+            ->with(FailureCache::CACHE_CHANNEL_KEY, serialize([new Envelope(), new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
 
-        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock, $loggerMock);
+        $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
     }
 
     public function test_flush_when_cache_is_not_empty()
     {
-        $telemetryMock = $this->createMock(Telemetry_Client::class);
+        $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
 
-        $telemetryChannelMock = $this->givenTelemetryChannelIsNotEmpty($telemetryMock);
         $cacheMock->method('has')->willReturn(true);
-        $cacheMock->method('get')->willReturn(serialize(['some_older_entry']));
+        $cacheMock->method('get')->willReturn(serialize([new Envelope('some_older_entry')]));
 
         $cacheMock->expects($this->once())
             ->method('delete')
-            ->with(Client::CACHE_CHANNEL_KEY);
-
-        $telemetryChannelMock->expects($this->once())
-            ->method('setQueue')
-            ->with(['some_older_entry', 'some_log_entry']);
+            ->with(FailureCache::CACHE_CHANNEL_KEY);
 
         $telemetryMock->expects($this->once())->method('flush');
 
-        $client = new Client($telemetryMock, Configuration::createDefault(), $cacheMock, $loggerMock);
+        $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
     }
 
-    private function givenTelemetryChannelIsNotEmpty(MockObject $telemetryMock): MockObject
+    private function createTelemetryClientMock(): MockObject
     {
-        $telemetryMock->method('getChannel')->willReturn($telemetryChannelMock = $this->createMock(Telemetry_Channel::class));
-        $telemetryChannelMock->method('getQueue')->willReturn(['some_log_entry']);
-        $telemetryChannelMock->method('getSerializedQueue')->willReturn(json_encode(['some_log_entry']));
+        $telemetryClientMock = $this->createMock(Telemetry_Client::class);
+        $telemetryClientMock->method('getChannel')->willReturn(
+            $telemetryChannelMock = $this->createMock(Telemetry_Channel::class)
+        );
+        $telemetryChannelMock->method('getQueue')->willReturn([new Envelope()]);
+        $telemetryChannelMock->method('getSerializedQueue')->willReturn(json_encode([new Envelope()]));
 
-        return $telemetryChannelMock;
+        return $telemetryClientMock;
     }
 }

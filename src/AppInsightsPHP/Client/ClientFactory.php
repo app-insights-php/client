@@ -18,8 +18,8 @@ final class ClientFactory implements ClientFactoryInterface
     public function __construct(
         string $instrumentationKey,
         Configuration $configuration,
-        CacheInterface $failureCache = null,
-        LoggerInterface $fallbackLogger = null
+        CacheInterface $failureCache,
+        LoggerInterface $fallbackLogger
     ) {
         $this->instrumentationKey = $instrumentationKey;
         $this->configuration = $configuration;
@@ -35,7 +35,7 @@ final class ClientFactory implements ClientFactoryInterface
         return new Client(
             $client,
             $this->configuration,
-            $this->failureCache,
+            new FailureCache($this->failureCache),
             $this->fallbackLogger
         );
     }

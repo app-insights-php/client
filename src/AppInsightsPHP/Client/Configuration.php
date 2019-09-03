@@ -12,6 +12,7 @@ use AppInsightsPHP\Client\Configuration\Traces;
 final class Configuration
 {
     private $enabled;
+    private $gzipEnabled;
     private $exceptions;
     private $dependencies;
     private $requests;
@@ -19,12 +20,14 @@ final class Configuration
 
     public function __construct(
         bool $enabled,
+        bool $gzipEnabled,
         Exceptions $exceptions,
         Dependenies $dependenies,
         Requests $requests,
         Traces $traces
     ) {
         $this->enabled = $enabled;
+        $this->gzipEnabled = $gzipEnabled;
         $this->exceptions = $exceptions;
         $this->dependencies = $dependenies;
         $this->requests = $requests;
@@ -35,6 +38,7 @@ final class Configuration
     {
         return new self(
             $enabled = true,
+            $gzipEnabled = true,
             new Configuration\Exceptions($enabled = true),
             new Configuration\Dependenies($enabled = true),
             new Configuration\Requests($enabled = true),
@@ -45,6 +49,11 @@ final class Configuration
     public function disable() : void
     {
         $this->enabled = false;
+    }
+
+    public function gzipEnabled(): bool
+    {
+        return $this->gzipEnabled;
     }
 
     public function enable() : void
