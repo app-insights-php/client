@@ -66,15 +66,17 @@ final class Client
                 try {
                     (new SendOne)($this->client, $item);
                 } catch (\Throwable $e) {
-                    $this->fallbackLogger->error(
-                        sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
-                        [
-                            'item' => \json_encode($item),
-                            'exception' => $e
-                        ]
-                    );
+                    if (false === ResponseMessage::message($e->getMessage())->isToOldTimeInEnvelope()) {
+                        $this->fallbackLogger->error(
+                            sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                            [
+                                'item' => \json_encode($item),
+                                'exception' => $e
+                            ]
+                        );
 
-                    $failures[] = $item;
+                        $failures[] = $item;
+                    }
                 }
             }
 
