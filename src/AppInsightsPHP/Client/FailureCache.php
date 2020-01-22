@@ -50,4 +50,3 @@ final class FailureCache
         return \count($this->all()) === 0;
     }
 }
-
