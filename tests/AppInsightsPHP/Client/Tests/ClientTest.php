@@ -332,7 +332,7 @@ final class ClientTest extends TestCase
      * @param string|null $time
      * @param bool $sent
      */
-    public function test_flush_with_provided_envelope_with_time_to_failure_cache(?string $time, bool $sent): void
+    public function test_flush_sending_envelope_with_valid_time_and_failure_cache_is_empty(?string $time, bool $sent): void
     {
         $httpHandler = new GuzzleHttpHandler();
         $httpHandler->append(new Response());
