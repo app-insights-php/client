@@ -10,8 +10,21 @@ use ApplicationInsights\Telemetry_Client;
 
 final class SendOne
 {
+    const TIME_48H_IN_SECONDS = 172800;
+
     public function __invoke(Telemetry_Client $telemetryClient, Envelope $envelope): void
     {
+        if ($envelope->getTime() === null) {
+            return;
+        }
+
+        $nowTimestamp = (new \DateTimeImmutable())->getTimestamp();
+        $envelopeTimestamp = (new \DateTimeImmutable($envelope->getTime()))->getTimestamp();
+
+        if (($nowTimestamp - $envelopeTimestamp) > self::TIME_48H_IN_SECONDS) {
+            return;
+        }
+
         /**
          * Telemetry_Channel is cloned here because it is not immutable. FailureCache is going to work on the
          * Telemetry_Channel's queue to send every failure in a separate request to avoid sending too big
