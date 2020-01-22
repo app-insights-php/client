@@ -7,10 +7,15 @@ namespace AppInsightsPHP\Client\Tests;
 use AppInsightsPHP\Client\Client;
 use AppInsightsPHP\Client\Configuration;
 use AppInsightsPHP\Client\FailureCache;
+use AppInsightsPHP\Client\Tests\Fake\FakeCache;
 use ApplicationInsights\Channel\Contracts\Envelope;
 use ApplicationInsights\Channel\Contracts\Request_Data;
+use ApplicationInsights\Channel\Contracts\Utils;
 use ApplicationInsights\Channel\Telemetry_Channel;
 use ApplicationInsights\Telemetry_Client;
+use GuzzleHttp\Client as GuzzleHttpClient;
+use GuzzleHttp\Handler\MockHandler as GuzzleHttpHandler;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -320,6 +325,56 @@ final class ClientTest extends TestCase
 
         $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
+    }
+
+    /**
+     * @dataProvider dataProvider
+     * @param string|null $time
+     * @param bool $sent
+     */
+    public function test_flush_sending_envelope_with_valid_time_and_failure_cache_is_empty(?string $time, bool $sent): void
+    {
+        $httpHandler = new GuzzleHttpHandler();
+        $httpHandler->append(new Response());
+
+        $httpClient = new GuzzleHttpClient([
+            'handler' => $httpHandler,
+        ]);
+
+        $telemetryChannelMock = $this->createMock(Telemetry_Channel::class);
+        $telemetryChannelMock->method('GetClient')->willReturn($httpClient);
+
+        $telemetryClientMock = $this->createMock(Telemetry_Client::class);
+        $telemetryClientMock->method('getChannel')->willReturn(
+            $telemetryChannelMock
+        );
+
+        $envelope = new Envelope();
+        $envelope->setTime($time);
+
+        $failureCache = new FailureCache($fakeCache = new FakeCache());
+        $failureCache->add($envelope);
+
+        $client = new Client(
+            $telemetryClientMock,
+            Configuration::createDefault(),
+            $failureCache,
+            $this->createMock(LoggerInterface::class)
+        );
+
+        $client->flush();
+
+        $requestSent = $httpHandler->getLastRequest() !== null;
+        $this->assertSame($requestSent, $sent);
+        $this->assertTrue($failureCache->empty());
+    }
+
+    public function dataProvider(): \Iterator
+    {
+        yield [null, false];
+        yield [Utils::returnISOStringForTime(), true];
+        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-1 day'))->getTimestamp()), true];
+        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-10 day'))->getTimestamp()), false];
     }
 
     public function test_flush_when_cache_is_not_empty()
