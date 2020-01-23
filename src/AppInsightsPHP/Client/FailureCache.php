@@ -23,7 +23,7 @@ final class FailureCache
     {
         if ($this->cache->has(self::CACHE_CHANNEL_KEY)) {
             $envelopes = \array_merge(
-                unserialize($this->cache->get(self::CACHE_CHANNEL_KEY)),
+                $this->all(),
                 $envelopes
             );
         }
@@ -38,11 +38,13 @@ final class FailureCache
 
     public function all(): array
     {
-        if ($this->cache->has(self::CACHE_CHANNEL_KEY)) {
-            return unserialize($this->cache->get(self::CACHE_CHANNEL_KEY));
+        $cacheData = $this->cache->get(self::CACHE_CHANNEL_KEY);
+
+        if (null === $cacheData) {
+            return [];
         }
 
-        return [];
+        return unserialize($cacheData);
     }
 
     public function empty(): bool

@@ -10,9 +10,9 @@ final class FakeCache implements CacheInterface
 {
     private $cache = [];
 
-    public function get($key, $default = null): string
+    public function get($key, $default = null): ?string
     {
-        return $this->cache[$key];
+        return $this->cache[$key] ?? $default;
     }
 
     public function set($key, $value, $ttl = null): void

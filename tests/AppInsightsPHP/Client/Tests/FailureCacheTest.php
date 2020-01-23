@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppInsightsPHP\Client\Tests;
 
 use AppInsightsPHP\Client\FailureCache;
+use AppInsightsPHP\Client\Tests\Fake\FakeCache;
 use ApplicationInsights\Channel\Contracts\Envelope;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
@@ -36,5 +37,13 @@ final class FailureCacheTest extends TestCase
 
         $failureCache = new FailureCache($cacheMock);
         $failureCache->add(new Envelope());
+    }
+
+    public function test_all_when_cache_is_empty()
+    {
+        $failureCache = new FailureCache($cache = new FakeCache());
+
+        $this->assertEmpty($failureCache->all());
+        $this->assertTrue($failureCache->empty());
     }
 }
