@@ -162,7 +162,7 @@ final class Client
         return $this->client->beginRequest($name, $url, $startTime);
     }
 
-    public function endRequest(Request_Data $request, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = NULL, array $measurements = NULL): void
+    public function endRequest(?Request_Data $request, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = NULL, array $measurements = NULL): void
     {
         if (!$this->configuration->isEnabled() || !$this->configuration->requests()->isEnabled()) {
             return;
