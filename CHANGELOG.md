@@ -1,4 +1,4 @@
-## [Unreleased] - 2021-02-13
+## [0.2.6] - 2021-02-13
 
 ### Added
 - [05d4a3](https://github.com/app-insights-php/client/commit/05d4a3c4b6a431f4e159b6ea60a6fa8cf2f7cdf1) - **full changelog** - [@norberttech](https://github.com/norberttech)
