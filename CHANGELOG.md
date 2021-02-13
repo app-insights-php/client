@@ -1,8 +1,14 @@
 ## [Unreleased] - 2021-02-13
 
+### Added
+- [05d4a3](https://github.com/app-insights-php/client/commit/05d4a3c4b6a431f4e159b6ea60a6fa8cf2f7cdf1) - **full changelog** - [@norberttech](https://github.com/norberttech)
+
 ### Changed
 - [d9245f](https://github.com/app-insights-php/client/commit/d9245f8d226675445cdb6f5d7b4f1fa70f37b77e) - **Execute tests at php 8.0** - [@norberttech](https://github.com/norberttech)
 - [64afcb](https://github.com/app-insights-php/client/commit/64afcb534e95db13695c81312d96c5edec5086c0) - **to latest php version, added aeon-php/automation integraton, added cs-fixer** - [@norberttech](https://github.com/norberttech)
+
+### Removed
+- [494c65](https://github.com/app-insights-php/client/commit/494c65e152c79638874291a6acbb791cd3845cee) - **cache files from repository** - [@norberttech](https://github.com/norberttech)
 
 ## [0.2.5] - 2020-01-23
 
