@@ -1,12 +1,13 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client\Configuration;
 
 final class Dependenies
 {
     private $enabled;
+
     private $ignoredDependencies;
 
     public function __construct(bool $enabled, array $ignoredDependencies = [])

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client\Tests;
 
@@ -24,7 +24,7 @@ use Psr\SimpleCache\CacheInterface;
 
 final class ClientTest extends TestCase
 {
-    public function test_tracking_when_client_is_disabled()
+    public function test_tracking_when_client_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -53,11 +53,11 @@ final class ClientTest extends TestCase
         $client->trackException(new \Exception());
         $client->trackDependency('name');
         $client->trackMessage('message');
-        $client->beginRequest('name', 'url', time());
+        $client->beginRequest('name', 'url', \time());
         $client->endRequest(new Request_Data());
     }
 
-    public function test_tracking_request_when_option_is_enabled()
+    public function test_tracking_request_when_option_is_enabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -72,10 +72,10 @@ final class ClientTest extends TestCase
             ->method('trackRequest')
             ->with('name', 'url', $this->isFinite(), 0, 200, true, null, null);
 
-        $client->trackRequest('name', 'url', time());
+        $client->trackRequest('name', 'url', \time());
     }
 
-    public function test_tracking_request_when_option_is_disabled()
+    public function test_tracking_request_when_option_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -95,12 +95,12 @@ final class ClientTest extends TestCase
         $telemetryMock->expects($this->never())
             ->method('endRequest');
 
-        $client->trackRequest('name', 'url', time());
-        $client->beginRequest('name', 'url', time());
+        $client->trackRequest('name', 'url', \time());
+        $client->beginRequest('name', 'url', \time());
         $client->endRequest(new Request_Data());
     }
 
-    public function test_tracking_dependencies_when_option_is_enabled()
+    public function test_tracking_dependencies_when_option_is_enabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -118,7 +118,7 @@ final class ClientTest extends TestCase
         $client->trackDependency('dependency_name');
     }
 
-    public function test_tracking_dependencies_when_option_is_disabled()
+    public function test_tracking_dependencies_when_option_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -137,7 +137,7 @@ final class ClientTest extends TestCase
         $client->trackDependency('dependency_name');
     }
 
-    public function test_tracking_dependencies_when_dependency_is_ignored()
+    public function test_tracking_dependencies_when_dependency_is_ignored() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -156,7 +156,7 @@ final class ClientTest extends TestCase
         $client->trackDependency('dependency_name');
     }
 
-    public function test_tracking_exceptions_when_option_is_enabled()
+    public function test_tracking_exceptions_when_option_is_enabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -176,7 +176,7 @@ final class ClientTest extends TestCase
         $client->trackException($exception);
     }
 
-    public function test_tracking_exceptions_when_option_is_disabled()
+    public function test_tracking_exceptions_when_option_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -197,7 +197,7 @@ final class ClientTest extends TestCase
         $client->trackException($exception);
     }
 
-    public function test_tracking_exceptions_that_suppose_to_be_ignored()
+    public function test_tracking_exceptions_that_suppose_to_be_ignored() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -217,7 +217,7 @@ final class ClientTest extends TestCase
         $client->trackException(new \RuntimeException());
     }
 
-    public function test_tracking_traces_when_option_is_enabled()
+    public function test_tracking_traces_when_option_is_enabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -235,7 +235,7 @@ final class ClientTest extends TestCase
         $client->trackMessage('message');
     }
 
-    public function test_tracking_traces_when_option_is_disabled()
+    public function test_tracking_traces_when_option_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
 
@@ -254,7 +254,7 @@ final class ClientTest extends TestCase
         $client->trackMessage('message');
     }
 
-    public function test_flushing_when_client_is_disabled()
+    public function test_flushing_when_client_is_disabled() : void
     {
         $configuration = Configuration::createDefault();
         $configuration->disable();
@@ -272,7 +272,7 @@ final class ClientTest extends TestCase
         $client->flush();
     }
 
-    public function test_fallback_logger_during_flush_unexpected_exception()
+    public function test_fallback_logger_during_flush_unexpected_exception() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
@@ -292,7 +292,7 @@ final class ClientTest extends TestCase
         $client->flush();
     }
 
-    public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_empty()
+    public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_empty() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
@@ -303,13 +303,13 @@ final class ClientTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with(FailureCache::CACHE_CHANNEL_KEY, serialize([new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
+            ->with(FailureCache::CACHE_CHANNEL_KEY, \serialize([new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
 
         $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
     }
 
-    public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_not_empty()
+    public function test_adding_queue_to_failure_cache_on_unexpected_api_exception_and_cache_is_not_empty() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
@@ -317,11 +317,11 @@ final class ClientTest extends TestCase
 
         $telemetryMock->method('flush')->willThrowException(new \RuntimeException('Unexpected API exception'));
         $cacheMock->method('has')->willReturn(true);
-        $cacheMock->method('get')->willReturn(serialize([new Envelope()]));
+        $cacheMock->method('get')->willReturn(\serialize([new Envelope()]));
 
         $cacheMock->expects($this->once())
             ->method('set')
-            ->with(FailureCache::CACHE_CHANNEL_KEY, serialize([new Envelope(), new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
+            ->with(FailureCache::CACHE_CHANNEL_KEY, \serialize([new Envelope(), new Envelope()]), FailureCache::CACHE_CHANNEL_TTL_SEC);
 
         $client = new Client($telemetryMock, Configuration::createDefault(), new FailureCache($cacheMock), $loggerMock);
         $client->flush();
@@ -329,10 +329,11 @@ final class ClientTest extends TestCase
 
     /**
      * @dataProvider dataProvider
-     * @param string|null $time
+     *
+     * @param null|string $time
      * @param bool $sent
      */
-    public function test_flush_sending_envelope_with_valid_time_and_failure_cache_is_empty(?string $time, bool $sent): void
+    public function test_flush_sending_envelope_with_valid_time_and_failure_cache_is_empty(?string $time, bool $sent) : void
     {
         $httpHandler = new GuzzleHttpHandler();
         $httpHandler->append(new Response());
@@ -369,7 +370,7 @@ final class ClientTest extends TestCase
         $this->assertTrue($failureCache->empty());
     }
 
-    public function dataProvider(): \Iterator
+    public function dataProvider() : \Iterator
     {
         yield [null, false];
         yield [Utils::returnISOStringForTime(), true];
@@ -377,14 +378,14 @@ final class ClientTest extends TestCase
         yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-10 day'))->getTimestamp()), false];
     }
 
-    public function test_flush_when_cache_is_not_empty()
+    public function test_flush_when_cache_is_not_empty() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
         $loggerMock = $this->createMock(LoggerInterface::class);
         $cacheMock = $this->createMock(CacheInterface::class);
 
         $cacheMock->method('has')->willReturn(true);
-        $cacheMock->method('get')->willReturn(serialize([new Envelope('some_older_entry')]));
+        $cacheMock->method('get')->willReturn(\serialize([new Envelope('some_older_entry')]));
 
         $cacheMock->expects($this->once())
             ->method('delete')
@@ -396,14 +397,14 @@ final class ClientTest extends TestCase
         $client->flush();
     }
 
-    private function createTelemetryClientMock(): MockObject
+    private function createTelemetryClientMock() : MockObject
     {
         $telemetryClientMock = $this->createMock(Telemetry_Client::class);
         $telemetryClientMock->method('getChannel')->willReturn(
             $telemetryChannelMock = $this->createMock(Telemetry_Channel::class)
         );
         $telemetryChannelMock->method('getQueue')->willReturn([new Envelope()]);
-        $telemetryChannelMock->method('getSerializedQueue')->willReturn(json_encode([new Envelope()]));
+        $telemetryChannelMock->method('getSerializedQueue')->willReturn(\json_encode([new Envelope()]));
 
         return $telemetryClientMock;
     }

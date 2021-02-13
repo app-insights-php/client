@@ -9,17 +9,17 @@ use PHPUnit\Framework\TestCase;
 
 final class TelemetryDataTest extends TestCase
 {
-    public function test_do_not_exceed_maximum_size(): void
+    public function test_do_not_exceed_maximum_size() : void
     {
         $this->assertFalse(
-            TelemetryData::message('message', ['foo' => 'foo', 'bar' => 'bar', 'message' => bin2hex(\random_bytes(10000))])->exceededMaximumSize()
+            TelemetryData::message('message', ['foo' => 'foo', 'bar' => 'bar', 'message' => \bin2hex(\random_bytes(10000))])->exceededMaximumSize()
         );
     }
 
     /**
      * @dataProvider invalid
      */
-    public function test_exceed_maximum_size(array $properties): void
+    public function test_exceed_maximum_size(array $properties) : void
     {
         $telemetry = TelemetryData::message('message', $properties);
 
@@ -29,12 +29,12 @@ final class TelemetryDataTest extends TestCase
         $telemetry->validate();
     }
 
-    public function invalid(): \Generator
+    public function invalid() : \Generator
     {
-        $message = bin2hex(\random_bytes(35000));
+        $message = \bin2hex(\random_bytes(35000));
 
         yield [['name' => $message]];
-        yield [['name' => substr($message, 0, 65000)]];
-        yield [['foo' => substr($message, 0, 12000), 'bar' => substr($message, 0, 23000), 'fuzz' => substr($message, 0, 30000)]];
+        yield [['name' => \substr($message, 0, 65000)]];
+        yield [['foo' => \substr($message, 0, 12000), 'bar' => \substr($message, 0, 23000), 'fuzz' => \substr($message, 0, 30000)]];
     }
 }

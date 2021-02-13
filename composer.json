@@ -11,30 +11,37 @@
     ],
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "AppInsightsPHP\\Client\\": "src/AppInsightsPHP/Client/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "": "tests"
+            "AppInsightsPHP\\Client\\Tests\\": "tests/AppInsightsPHP/Client/Tests/"
         }
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.3 || ^8.0",
         "microsoft/application-insights": "^0.4.5",
         "guzzlehttp/guzzle": "^6.0",
         "psr/simple-cache": "^1.0",
         "psr/log": "^1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0 || ^8.0"
+        "phpunit/phpunit": "^8.5",
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
     "scripts": {
-        "test": "phpunit"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.2.x-dev"
-        }
+        "phpunit": [
+            "phpunit --colors=always"
+        ],
+        "static:analyze": [
+            "php-cs-fixer fix --dry-run"
+        ],
+        "test" : [
+            "@phpunit"
+        ],
+        "cs:php:fix": [
+            "php-cs-fixer fix"
+        ]
     }
 }

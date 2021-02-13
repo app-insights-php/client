@@ -1,19 +1,20 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client\Configuration;
 
 final class Exceptions
 {
     private $ignoredExceptions;
+
     private $enabled;
 
     public function __construct(bool $enabled, array $ignoredExceptions = [])
     {
         foreach ($ignoredExceptions as $exceptionClass) {
             if (!\class_exists($exceptionClass)) {
-                throw new \RuntimeException(sprintf('Exception class "%s" ignored by app_insights_php ignored_exceptions options does not exists', $exceptionClass));
+                throw new \RuntimeException(\sprintf('Exception class "%s" ignored by app_insights_php ignored_exceptions options does not exists', $exceptionClass));
             }
         }
 
@@ -23,9 +24,9 @@ final class Exceptions
 
     public function isIgnored(string $exceptionClass) : bool
     {
-        return (bool) array_filter(
+        return (bool) \array_filter(
             $this->ignoredExceptions,
-            function(string $ignoredExceptionClass) use ($exceptionClass) {
+            function (string $ignoredExceptionClass) use ($exceptionClass) {
                 return $ignoredExceptionClass === $exceptionClass;
             }
         );
@@ -49,11 +50,11 @@ final class Exceptions
     public function ignore(string $exceptionClass) : void
     {
         if (!\class_exists($exceptionClass)) {
-            throw new \RuntimeException(sprintf('Exception class "%s" ignored by app_insights_php ignored_exceptions options does not exists', $exceptionClass));
+            throw new \RuntimeException(\sprintf('Exception class "%s" ignored by app_insights_php ignored_exceptions options does not exists', $exceptionClass));
         }
 
-        if (\in_array($exceptionClass, $this->ignoredExceptions)) {
-            return ;
+        if (\in_array($exceptionClass, $this->ignoredExceptions, true)) {
+            return;
         }
 
         $this->ignoredExceptions[] = $exceptionClass;

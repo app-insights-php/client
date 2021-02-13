@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client;
 
@@ -11,8 +11,11 @@ use Psr\SimpleCache\CacheInterface;
 final class ClientFactory implements ClientFactoryInterface
 {
     private $instrumentationKey;
+
     private $configuration;
+
     private $failureCache;
+
     private $fallbackLogger;
 
     public function __construct(

@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client;
 
@@ -12,10 +12,15 @@ use AppInsightsPHP\Client\Configuration\Traces;
 final class Configuration
 {
     private $enabled;
+
     private $gzipEnabled;
+
     private $exceptions;
+
     private $dependencies;
+
     private $requests;
+
     private $traces;
 
     public function __construct(
@@ -51,7 +56,7 @@ final class Configuration
         $this->enabled = false;
     }
 
-    public function gzipEnabled(): bool
+    public function gzipEnabled() : bool
     {
         return $this->gzipEnabled;
     }
@@ -66,22 +71,22 @@ final class Configuration
         return $this->enabled;
     }
 
-    public function exceptions(): Exceptions
+    public function exceptions() : Exceptions
     {
         return $this->exceptions;
     }
 
-    public function dependencies(): Dependenies
+    public function dependencies() : Dependenies
     {
         return $this->dependencies;
     }
 
-    public function requests(): Requests
+    public function requests() : Requests
     {
         return $this->requests;
     }
 
-    public function traces(): Traces
+    public function traces() : Traces
     {
         return $this->traces;
     }

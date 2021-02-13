@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace AppInsightsPHP\Client;
 
@@ -15,8 +15,11 @@ use Psr\Log\LoggerInterface;
 final class Client
 {
     private $client;
+
     private $configuration;
+
     private $failureCache;
+
     private $fallbackLogger;
 
     public function __construct(
@@ -33,12 +36,12 @@ final class Client
         $this->client->getChannel()->setSendGzipped($this->configuration->gzipEnabled());
     }
 
-    public function configuration(): Configuration
+    public function configuration() : Configuration
     {
         return $this->configuration;
     }
 
-    public function flush(): ?ResponseInterface
+    public function flush() : ?ResponseInterface
     {
         if (!$this->configuration->isEnabled()) {
             return null;
@@ -49,7 +52,7 @@ final class Client
         } catch (\Throwable $e) {
             $this->failureCache->add(...$this->client->getChannel()->getQueue());
             $this->fallbackLogger->error(
-                sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                \sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
                 \json_decode($this->client->getChannel()->getSerializedQueue(), true)
             );
 
@@ -62,15 +65,16 @@ final class Client
             }
 
             $failures = [];
+
             foreach ($this->failureCache->all() as $item) {
                 try {
                     (new SendOne)($this->client, $item);
                 } catch (\Throwable $e) {
                     $this->fallbackLogger->error(
-                        sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
+                        \sprintf('Exception occurred while flushing App Insights Telemetry Client: %s', $e->getMessage()),
                         [
                             'item' => \json_encode($item),
-                            'exception' => $e
+                            'exception' => $e,
                         ]
                     );
 
@@ -85,7 +89,7 @@ final class Client
             }
         } catch (\Throwable $e) {
             $this->fallbackLogger->error(
-                sprintf('Exception occurred while flushing App Insights Failure Cache: %s', $e->getMessage()),
+                \sprintf('Exception occurred while flushing App Insights Failure Cache: %s', $e->getMessage()),
                 ['exception' => $e]
             );
         }
@@ -93,17 +97,17 @@ final class Client
         return null;
     }
 
-    public function getContext(): Telemetry_Context
+    public function getContext() : Telemetry_Context
     {
         return $this->client->getContext();
     }
 
-    public function getChannel(): Telemetry_Channel
+    public function getChannel() : Telemetry_Channel
     {
         return $this->client->getChannel();
     }
 
-    public function trackPageView(string $name, string $url, int $duration = 0, array $properties = NULL, array $measurements = NULL): void
+    public function trackPageView(string $name, string $url, int $duration = 0, array $properties = null, array $measurements = null) : void
     {
         if (!$this->configuration->isEnabled()) {
             return;
@@ -113,7 +117,7 @@ final class Client
         $this->client->trackPageView($name, $url, $duration, $properties, $measurements);
     }
 
-    public function trackMetric(string $name, float $value, int $type = NULL, int $count = NULL, float $min = NULL, float $max = NULL, float $stdDev = NULL, array $properties = NULL): void
+    public function trackMetric(string $name, float $value, int $type = null, int $count = null, float $min = null, float $max = null, float $stdDev = null, array $properties = null) : void
     {
         if (!$this->configuration->isEnabled()) {
             return;
@@ -123,7 +127,7 @@ final class Client
         $this->client->trackMetric($name, $value, $type, $count, $min, $max, $stdDev, $properties);
     }
 
-    public function trackEvent(string $name, array $properties = NULL, array $measurements = NULL): void
+    public function trackEvent(string $name, array $properties = null, array $measurements = null) : void
     {
         if (!$this->configuration->isEnabled()) {
             return;
@@ -133,7 +137,7 @@ final class Client
         $this->client->trackEvent($name, $properties, $measurements);
     }
 
-    public function trackMessage(string $message, int $severityLevel = NULL, array $properties = NULL): void
+    public function trackMessage(string $message, int $severityLevel = null, array $properties = null) : void
     {
         if (!$this->configuration->isEnabled() || !$this->configuration->traces()->isEnabled()) {
             return;
@@ -143,7 +147,7 @@ final class Client
         $this->client->trackMessage($message, $severityLevel, $properties);
     }
 
-    public function trackRequest(string $name, string $url, int $startTime, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = NULL, array $measurements = NULL): void
+    public function trackRequest(string $name, string $url, int $startTime, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = null, array $measurements = null) : void
     {
         if (!$this->configuration->isEnabled() || !$this->configuration->requests()->isEnabled()) {
             return;
@@ -153,7 +157,7 @@ final class Client
         $this->client->trackRequest($name, $url, $startTime, $durationInMilliseconds, $httpResponseCode, $isSuccessful, $properties, $measurements);
     }
 
-    public function beginRequest(string $name, string $url, int $startTime): ?Request_Data
+    public function beginRequest(string $name, string $url, int $startTime) : ?Request_Data
     {
         if (!$this->configuration->isEnabled() || !$this->configuration->requests()->isEnabled()) {
             return null;
@@ -162,7 +166,7 @@ final class Client
         return $this->client->beginRequest($name, $url, $startTime);
     }
 
-    public function endRequest(Request_Data $request, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = NULL, array $measurements = NULL): void
+    public function endRequest(Request_Data $request, int $durationInMilliseconds = 0, int $httpResponseCode = 200, bool $isSuccessful = true, array $properties = null, array $measurements = null) : void
     {
         if (!$this->configuration->isEnabled() || !$this->configuration->requests()->isEnabled()) {
             return;
@@ -172,7 +176,7 @@ final class Client
         $this->client->endRequest($request, $durationInMilliseconds, $httpResponseCode, $isSuccessful, $properties, $measurements);
     }
 
-    public function trackException(\Throwable $exception, array $properties = NULL, array $measurements = NULL): void
+    public function trackException(\Throwable $exception, array $properties = null, array $measurements = null) : void
     {
         if (!$this->configuration->isEnabled() ||
             !$this->configuration->exceptions()->isEnabled() ||
@@ -185,7 +189,7 @@ final class Client
         $this->client->trackException($exception, $properties, $measurements);
     }
 
-    public function trackDependency(string $name, string $type = "", string $commandName = NULL, int $startTime = NULL, int $durationInMilliseconds = 0, bool $isSuccessful = true, int $resultCode = NULL, array $properties = NULL): void
+    public function trackDependency(string $name, string $type = '', string $commandName = null, int $startTime = null, int $durationInMilliseconds = 0, bool $isSuccessful = true, int $resultCode = null, array $properties = null) : void
     {
         if (!$this->configuration->isEnabled() ||
             !$this->configuration->dependencies()->isEnabled() ||

@@ -10,9 +10,9 @@ use ApplicationInsights\Telemetry_Client;
 
 final class SendOne
 {
-    const TIME_48H_IN_SECONDS = 172800;
+    public const TIME_48H_IN_SECONDS = 172800;
 
-    public function __invoke(Telemetry_Client $telemetryClient, Envelope $envelope): void
+    public function __invoke(Telemetry_Client $telemetryClient, Envelope $envelope) : void
     {
         if ($envelope->getTime() === null) {
             return;
