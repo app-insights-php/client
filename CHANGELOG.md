@@ -1,3 +1,8 @@
+## [Unreleased] - 2022-05-26
+
+### Changed
+- [#48](https://github.com/app-insights-php/client/pull/48) - **Required version of app-insights-php/application-insights to 4.7** - [@wojtekzymonik](https://github.com/wojtekzymonik)
+
 ## [0.2.6] - 2021-02-13
 
 ### Added
