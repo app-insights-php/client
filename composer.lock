@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b447c9e8a58364a524c9cb5c1900eac4",
+    "content-hash": "7caf2c15582338a539ec592955e68da2",
     "packages": [
         {
             "name": "app-insights-php/application-insights",
-            "version": "0.4.6",
+            "version": "0.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/app-insights-php/applicationInsights-php.git",
-                "reference": "d55da7bc4139da62b915570f9aff699d20a42fd1"
+                "reference": "738328cc6f9f54e59f7aa7be53783e4cf5ff63b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/d55da7bc4139da62b915570f9aff699d20a42fd1",
-                "reference": "d55da7bc4139da62b915570f9aff699d20a42fd1",
+                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/738328cc6f9f54e59f7aa7be53783e4cf5ff63b7",
+                "reference": "738328cc6f9f54e59f7aa7be53783e4cf5ff63b7",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": ">=5.0 <=6.3.3",
+                "guzzlehttp/guzzle": ">=5.0 <=7.4.4",
                 "php": "^7.4.0 || ~8.0 || ~8.1"
             },
             "type": "library",
@@ -44,9 +44,9 @@
                 "telemetry"
             ],
             "support": {
-                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.4.6"
+                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.4.7"
             },
-            "time": "2022-04-15T12:16:42+00:00"
+            "time": "2022-05-26T12:07:10+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4669,5 +4669,5 @@
         "php": "^7.3 || ~8.0 || ~8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.0.0"
 }
