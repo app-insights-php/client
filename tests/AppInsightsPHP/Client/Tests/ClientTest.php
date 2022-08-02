@@ -344,6 +344,7 @@ final class ClientTest extends TestCase
 
         $telemetryChannelMock = $this->createMock(Telemetry_Channel::class);
         $telemetryChannelMock->method('GetClient')->willReturn($httpClient);
+        $telemetryChannelMock->method('getEndpointUrl')->willReturn('https://dc.services.visualstudio.com/v2/track');
 
         $telemetryClientMock = $this->createMock(Telemetry_Client::class);
         $telemetryClientMock->method('getChannel')->willReturn(
