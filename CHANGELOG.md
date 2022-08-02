@@ -1,4 +1,4 @@
-## [Unreleased] - 2022-08-02
+## [0.2.9] - 2022-08-02
 
 ### Updated
 - [e44fcf](https://github.com/app-insights-php/client/commit/e44fcfc3307000a96f359a76cb9756cf5c769d2c) - **dependencies, allow guzzle 7 dependency** - [@norberttech](https://github.com/norberttech)
