@@ -1,3 +1,8 @@
+## [Unreleased] - 2022-08-09
+
+### Updated
+- [482856](https://github.com/app-insights-php/client/commit/482856da8737ab492708f8cd6cd163bcd5535c98) - **dependencies** - [@norberttech](https://github.com/norberttech)
+
 ## [0.2.10] - 2022-08-09
 
 ### Updated
