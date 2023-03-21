@@ -1,3 +1,12 @@
+## [Unreleased] - 2023-03-21
+
+### Added
+- [#72](https://github.com/app-insights-php/client/pull/72) - **Support for PHP version 8.2** - [@TylerFiekens](https://github.com/TylerFiekens)
+- [#72](https://github.com/app-insights-php/client/pull/72) - **Enabled Support for new psr/log versions** - [@TylerFiekens](https://github.com/TylerFiekens)
+
+### Changed
+- [#72](https://github.com/app-insights-php/client/pull/72) - **Enabled support for PHP 8.2 in workflows** - [@TylerFiekens](https://github.com/TylerFiekens)
+
 ## [0.2.11] - 2022-08-09
 
 ### Updated
