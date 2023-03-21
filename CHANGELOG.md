@@ -1,4 +1,4 @@
-## [Unreleased] - 2023-03-21
+## [0.2.12] - 2023-03-21
 
 ### Added
 - [#72](https://github.com/app-insights-php/client/pull/72) - **Support for PHP version 8.2** - [@TylerFiekens](https://github.com/TylerFiekens)
