@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f923c7cb2af8829634e07d051b3c553",
+    "content-hash": "79813c0978982712b760e06d4259f70e",
     "packages": [
         {
             "name": "app-insights-php/application-insights",
-            "version": "0.4.8",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/app-insights-php/applicationInsights-php.git",
-                "reference": "56762295145d6aecab2e2e68bb20dee0c3150843"
+                "reference": "0d7d59c834f1de778d609145ec0334a0d8182fd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/56762295145d6aecab2e2e68bb20dee0c3150843",
-                "reference": "56762295145d6aecab2e2e68bb20dee0c3150843",
+                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/0d7d59c834f1de778d609145ec0334a0d8182fd7",
+                "reference": "0d7d59c834f1de778d609145ec0334a0d8182fd7",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.4",
-                "php": "^7.4.0 || ~8.0 || ~8.1"
+                "php": "~8.1 || ~8.2"
             },
             "type": "library",
             "autoload": {
@@ -44,9 +44,9 @@
                 "telemetry"
             ],
             "support": {
-                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.4.8"
+                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.5.0"
             },
-            "time": "2022-08-09T17:41:54+00:00"
+            "time": "2023-03-28T10:19:59+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4348,7 +4348,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "~8.1 || ~8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
