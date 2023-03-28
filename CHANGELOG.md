@@ -3,6 +3,9 @@
 ### Updated
 - [eba5ac](https://github.com/app-insights-php/client/commit/eba5acb16881ec0acc677169cdb1f45eba364f83) - **php version to ~8.1||~8.2** - [@norberttech](https://github.com/norberttech)
 
+### Removed
+- [57b75f](https://github.com/app-insights-php/client/commit/57b75faaf8c59f5e06de6bc6b2d3662012f79c6c) - **nix, updated dependencies** - [@norberttech](https://github.com/norberttech)
+
 ## [0.2.12] - 2023-03-21
 
 ### Added
