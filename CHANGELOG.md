@@ -1,3 +1,8 @@
+## [Unreleased] - 2023-03-28
+
+### Updated
+- [81fbb1](https://github.com/app-insights-php/client/commit/81fbb13dcbac136b63605e591b5bab24a5b11973) - **dev dependencie** - [@norberttech](https://github.com/norberttech)
+
 ## [0.3.0] - 2023-03-28
 
 ### Updated
