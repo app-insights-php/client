@@ -9,6 +9,15 @@ use PHPUnit\Framework\TestCase;
 
 final class TelemetryDataTest extends TestCase
 {
+    public static function invalid() : \Generator
+    {
+        $message = \bin2hex(\random_bytes(35000));
+
+        yield [['name' => $message]];
+        yield [['name' => \substr($message, 0, 65000)]];
+        yield [['foo' => \substr($message, 0, 12000), 'bar' => \substr($message, 0, 23000), 'fuzz' => \substr($message, 0, 30000)]];
+    }
+
     public function test_do_not_exceed_maximum_size() : void
     {
         $this->assertFalse(
@@ -27,14 +36,5 @@ final class TelemetryDataTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $telemetry->validate();
-    }
-
-    public function invalid() : \Generator
-    {
-        $message = \bin2hex(\random_bytes(35000));
-
-        yield [['name' => $message]];
-        yield [['name' => \substr($message, 0, 65000)]];
-        yield [['foo' => \substr($message, 0, 12000), 'bar' => \substr($message, 0, 23000), 'fuzz' => \substr($message, 0, 30000)]];
     }
 }

@@ -24,6 +24,14 @@ use Psr\SimpleCache\CacheInterface;
 
 final class ClientTest extends TestCase
 {
+    public static function dataProvider() : \Iterator
+    {
+        yield [null, false];
+        yield [Utils::returnISOStringForTime(), true];
+        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-1 day'))->getTimestamp()), true];
+        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-10 day'))->getTimestamp()), false];
+    }
+
     public function test_tracking_when_client_is_disabled() : void
     {
         $telemetryMock = $this->createTelemetryClientMock();
@@ -369,14 +377,6 @@ final class ClientTest extends TestCase
         $requestSent = $httpHandler->getLastRequest() !== null;
         $this->assertSame($requestSent, $sent);
         $this->assertTrue($failureCache->empty());
-    }
-
-    public function dataProvider() : \Iterator
-    {
-        yield [null, false];
-        yield [Utils::returnISOStringForTime(), true];
-        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-1 day'))->getTimestamp()), true];
-        yield [Utils::returnISOStringForTime((new \DateTimeImmutable('-10 day'))->getTimestamp()), false];
     }
 
     public function test_flush_when_cache_is_not_empty() : void
