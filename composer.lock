@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "app-insights-php/application-insights",
-            "version": "0.5.0",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/app-insights-php/applicationInsights-php.git",
-                "reference": "0d7d59c834f1de778d609145ec0334a0d8182fd7"
+                "reference": "90dd34cbd5e55dded7d9d98c9d55cf2b680d239b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/0d7d59c834f1de778d609145ec0334a0d8182fd7",
-                "reference": "0d7d59c834f1de778d609145ec0334a0d8182fd7",
+                "url": "https://api.github.com/repos/app-insights-php/applicationInsights-php/zipball/90dd34cbd5e55dded7d9d98c9d55cf2b680d239b",
+                "reference": "90dd34cbd5e55dded7d9d98c9d55cf2b680d239b",
                 "shasum": ""
             },
             "require": {
@@ -44,9 +44,9 @@
                 "telemetry"
             ],
             "support": {
-                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.5.0"
+                "source": "https://github.com/app-insights-php/applicationInsights-php/tree/0.5.1"
             },
-            "time": "2023-03-28T10:19:59+00:00"
+            "time": "2023-10-13T22:01:45+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -375,16 +375,16 @@
         },
         {
             "name": "psr/http-client",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-client.git",
-                "reference": "0955afe48220520692d2d09f7ab7e0f93ffd6a31"
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-client/zipball/0955afe48220520692d2d09f7ab7e0f93ffd6a31",
-                "reference": "0955afe48220520692d2d09f7ab7e0f93ffd6a31",
+                "url": "https://api.github.com/repos/php-fig/http-client/zipball/bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
                 "shasum": ""
             },
             "require": {
@@ -421,9 +421,9 @@
                 "psr-18"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-client/tree/1.0.2"
+                "source": "https://github.com/php-fig/http-client"
             },
-            "time": "2023-04-10T20:12:12+00:00"
+            "time": "2023-09-23T14:17:50+00:00"
         },
         {
             "name": "psr/http-factory",
